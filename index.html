@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Theme Listings</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script>
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    getInfo(this);
+                }
+            };
+            xhttp.open("GET", "themes.xml", true);
+            xhttp.send();
+            
+            
+            function getInfo(toursXML) {
+                var tours, xmlDoc;
+                xmlDoc = toursXML.responseXML;
+                tours = xmlDoc.getElementsByTagName("ThemeData");
+                for (i = 0; i < tours.length; i++) {
+                    createCard(tours[i].childNodes[3].innerHTML, tours[i].childNodes[0].innerHTML);
+                    
+                }
+            };
+            
+            //dynamically create cards
+            function createCard(tourName, tourDescription) {
+               
+                let col = document.createElement('div');
+            
+                let img = document.createElement('img');
+                img.className = 'card-img-top';
+                //will need to be set to some relevant tree in the theme
+                img.setAttribute('src', 'https://previews.123rf.com/images/olegd/olegd1108/olegd110800153/10298561-close-up-of-coconut-palm-tree.jpg');
+            
+                let card = document.createElement('div');
+                card.className = 'card h-100 shadow-sm';
+            
+                let cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+            
+                let title = document.createElement('h2');
+                title.className = '';
+                title.innerText = tourName;
+            
+                //theme description
+                let description = document.createElement('p');
+                description.className = '';
+                description.innerText = tourDescription;
+            
+                let cardFooter = document.createElement('div');
+                cardFooter.className = 'card-footer text-center mt-4';
+            
+                //needs link to theme map
+                let map = document.createElement('a');
+                map.className = 'btn float-start btn-warning';
+                map.setAttribute('href', '');
+                map.innerText = 'Map';
+            
+                //needs link to theme directory
+                let directory = document.createElement('a');
+                directory.className = 'btn float-end btn-danger';
+                directory.setAttribute('href', '');
+                directory.innerText = 'Directory';
+            
+                //build card
+                cardBody.appendChild(title);
+                cardBody.appendChild(description);
+                card.appendChild(img);
+                card.appendChild(cardBody);
+                cardFooter.appendChild(map);
+                cardFooter.appendChild(directory);
+                card.appendChild(cardFooter)
+                col.appendChild(card);
+                cardContainer.appendChild(col);
+            };
+            
+            
+        </script>
+    </head>
+    <body>
+        <div class="container-fluid my-4 p-3" style="position: relative;">
+            <div id="cardContainer" class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+            </div>
+        </div>
+    </body>
+</html>
