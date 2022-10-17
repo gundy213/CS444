@@ -80,16 +80,15 @@
             function createCard(tourName, tourDescription, tourId) {
                
                 let col = document.createElement('div');
-                col.className = 'col';
             
                 let img = document.createElement('img');
-                img.className = 'card-img-top h-50 ';
+                img.className = 'card-img-top';
                 img.setAttribute("id", "image-"+tourId)
                 //will need to be set to some relevant tree in the theme
                 img.setAttribute('src', 'https://previews.123rf.com/images/olegd/olegd1108/olegd110800153/10298561-close-up-of-coconut-palm-tree.jpg');
                 
                 let card = document.createElement('div');
-                card.className = 'card h-75 shadow-sm';
+                card.className = 'card h-100 shadow-sm';
             
                 let cardBody = document.createElement('div');
                 cardBody.className = 'card-body';
@@ -103,7 +102,8 @@
                 description.className = '';
                 description.innerText = tourDescription;
             
-                
+                let cardFooter = document.createElement('div');
+                cardFooter.className = 'card-footer text-center mt-4';
             
                 //needs link to theme map
                 let map = document.createElement('a');
@@ -111,14 +111,20 @@
                 map.setAttribute('href', '');
                 map.innerText = 'Map';
             
+                //needs link to theme directory
+                let directory = document.createElement('a');
+                directory.className = 'btn float-end btn-danger';
+                directory.setAttribute('href', '');
+                directory.innerText = 'Directory';
+            
                 //build card
                 cardBody.appendChild(title);
                 cardBody.appendChild(description);
-                cardBody.appendChild(map);
                 card.appendChild(img);
                 card.appendChild(cardBody);
-                
-                
+                cardFooter.appendChild(map);
+                cardFooter.appendChild(directory);
+                card.appendChild(cardFooter)
                 col.appendChild(card);
                 cardContainer.appendChild(col);
             };
@@ -128,7 +134,7 @@
     </head>
     <body>
         <div class="container align-items-center my-4 p-3" style="position: relative;">
-            <div id="cardContainer" class="row row-cols-1 row-cols-xs-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 g-3">
+            <div id="cardContainer" class="row row-cols-1 row-cols-xs-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-4 g-3 ">
             </div>
         </div>
     </body>
