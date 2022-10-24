@@ -7,13 +7,12 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link href="css/skipToLink.css" rel="stylesheet">
         <script>
-
             // This is an array containing the paths to all the 
             // images we have used for cards so far
             // we need this so we can prevent duplicate
             // images from being used on our cards
             const entityImagesUsed = [];
-
+            
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -34,13 +33,13 @@
                     var themeName = tours[i].childNodes[3].innerHTML;
                     var themeDescription = tours[i].childNodes[0].innerHTML;
                     var themeId = tours[i].childNodes[2].innerHTML;
-
+            
                     createCard(themeName, themeDescription, themeId);
-
+            
                     getXMLForTheme(themeName, themeDescription, themeId);
                 }
             };
-
+            
             // This function makes a XMLHttpRequest to load in
             // the xml for a specific theme
             function getXMLForTheme(themeName, themeDescription, themeId)
@@ -56,7 +55,7 @@
                 xhttp.open("GET", "xmlForEachTheme/" + themeId +  ".xml", true);
                 xhttp.send(); 
             }
-
+            
             // Uses the xml file for the specific theme to find an image for the card
             // then populates the image based on the image-[themeId] id attribute
             // added to each cards image
@@ -138,23 +137,23 @@
     </head>
     <body>
         <!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark background-color: #48099b py-2 fixed-top">
-    <div class="container-fluid">
-      <a id="pageLabel" class="navbar-brand ">WSU Arboretum</a>
-      <a class="skip" href='#content'>Skip to content</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navmenu">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a href="" class="nav-link">Winona State University</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark background-color: #48099b py-2 fixed-top">
+            <div class="container-fluid">
+                <a id="pageLabel" class="navbar-brand ">WSU Arboretum</a>
+                <a class="skip" href='#content'>Skip to content</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navmenu">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a href="" class="nav-link">Winona State University</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar -->
         <div class="container-lg">
             <div id="cardContainer" class="row row-cols-1 row-cols-xs-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 g-3 ">
             </div>
