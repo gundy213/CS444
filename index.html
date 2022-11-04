@@ -14,6 +14,23 @@
             // images from being used on our cards
             const entityImagesUsed = [];
             
+            // this map is used to escape xml entities
+            // to there character equivalent
+            var escaped_one_to_xml_special_map = {
+            '&amp;': '&',
+            '&quot;': '"',
+            '&lt;': '<',
+            '&gt;': '>'
+            };
+            // this function uses the above map to replace 
+            // all xml entities to there character equivalent
+            function decodeXml(string) {
+                return string.replace(/(&quot;|&lt;|&gt;|&amp;)/g,
+                    function(str, item) {
+                        return escaped_one_to_xml_special_map[item];
+                });
+            }
+            
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -32,7 +49,9 @@
                 tours = xmlDoc.getElementsByTagName("ThemeData");
                 for (i = 0; i < tours.length; i++) {
                     var themeName = tours[i].childNodes[3].innerHTML;
+                    themeName = decodeXml(themeName);
                     var themeDescription = tours[i].childNodes[0].innerHTML;
+                    themeDescription = decodeXml(themeDescription);
                     var themeId = tours[i].childNodes[2].innerHTML;
             
                     createCard(themeName, themeDescription, themeId);
