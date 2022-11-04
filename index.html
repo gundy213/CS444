@@ -30,6 +30,22 @@
                         return escaped_one_to_xml_special_map[item];
                 });
             }
+
+            function constrainLength(str, length)
+            {
+                if (str.length > length)
+                {
+                    console.log("this ran");
+
+                    //trim the string to the maximum length
+                    str = str.substring(0, length);
+                    //re-trim if we are in the middle of a word
+                    str = str.substr(0, Math.min(str.length, str.lastIndexOf(" ")))
+                    
+                    str += "...";
+                }
+                return str;
+            }
             
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -52,8 +68,9 @@
                     themeName = decodeXml(themeName);
                     var themeDescription = tours[i].childNodes[0].innerHTML;
                     themeDescription = decodeXml(themeDescription);
+                    themeDescription = constrainLength(themeDescription, 100);
                     var themeId = tours[i].childNodes[2].innerHTML;
-            
+
                     createCard(themeName, themeDescription, themeId);
             
                     getXMLForTheme(themeName, themeDescription, themeId);
