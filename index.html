@@ -14,6 +14,39 @@
             // images from being used on our cards
             const entityImagesUsed = [];
             
+            // this map is used to escape xml entities
+            // to there character equivalent
+            var escaped_one_to_xml_special_map = {
+            '&amp;': '&',
+            '&quot;': '"',
+            '&lt;': '<',
+            '&gt;': '>'
+            };
+            // this function uses the above map to replace 
+            // all xml entities to there character equivalent
+            function decodeXml(string) {
+                return string.replace(/(&quot;|&lt;|&gt;|&amp;)/g,
+                    function(str, item) {
+                        return escaped_one_to_xml_special_map[item];
+                });
+            }
+
+            function constrainLength(str, length)
+            {
+                if (str.length > length)
+                {
+                    console.log("this ran");
+
+                    //trim the string to the maximum length
+                    str = str.substring(0, length);
+                    //re-trim if we are in the middle of a word
+                    str = str.substr(0, Math.min(str.length, str.lastIndexOf(" ")))
+                    
+                    str += "...";
+                }
+                return str;
+            }
+            
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -32,9 +65,12 @@
                 tours = xmlDoc.getElementsByTagName("ThemeData");
                 for (i = 0; i < tours.length; i++) {
                     var themeName = tours[i].childNodes[3].innerHTML;
+                    themeName = decodeXml(themeName);
                     var themeDescription = tours[i].childNodes[0].innerHTML;
+                    themeDescription = decodeXml(themeDescription);
+                    themeDescription = constrainLength(themeDescription, 100);
                     var themeId = tours[i].childNodes[2].innerHTML;
-            
+
                     createCard(themeName, themeDescription, themeId);
             
                     getXMLForTheme(themeName, themeDescription, themeId);
@@ -157,6 +193,14 @@
         </nav>
         <!-- Navbar -->
         <div id="invisible" class="container rounded p-2 my-2">
+        </div>
+
+        <div class="cotainer-lg mt-5 text-center">
+            <div class = "row">
+                <div  class="col">
+                    <img src="logo.jpg" class="figure-img img-fluid" alt="Arboretum at Winona State logo">
+                </div>
+            </div>
         </div>
 
         <!-- Main -->
