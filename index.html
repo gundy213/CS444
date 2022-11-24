@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,256 +10,13 @@
         <link href="css/skipToLink.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
-        <script>
-           
-            // This is an array containing the paths to all the 
-            // images we have used for cards so far
-            // we need this so we can prevent duplicate
-            // images from being used on our cards
-            const entityImagesUsed = [];
-            
-            // this map is used to escape xml entities
-            // to there character equivalent
-            var escaped_one_to_xml_special_map = {
-            '&amp;': '&',
-            '&quot;': '"',
-            '&lt;': '<',
-            '&gt;': '>'
-            };
-            // this function uses the above map to replace 
-            // all xml entities to there character equivalent
-            function decodeXml(string) {
-                return string.replace(/(&quot;|&lt;|&gt;|&amp;)/g,
-                    function(str, item) {
-                        return escaped_one_to_xml_special_map[item];
-                });
-            }
-
-            /*function constrainLength(str, length)
-            {
-                if (str.length > length)
-                {
-                    console.log("this ran");
-
-                    //trim the string to the maximum length
-                    str = str.substring(0, length);
-                    //re-trim if we are in the middle of a word
-                    str = str.substr(0, Math.min(str.length, str.lastIndexOf(" ")))
-                    
-                    str += "...";
-                }
-                return str;
-            }
-            */
-
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    getInfo(this);
-                }
-            };
-            xhttp.open("GET", "themes.xml", true);
-            xhttp.send();
-            
-            // toursXML is the response from an XML request for the themes.xml
-            // This function calls the getXMLForTheme function for each
-            // ThemeData in the themes.xml
-            function getInfo(toursXML) {
-                var tours, xmlDoc;
-                xmlDoc = toursXML.responseXML;
-                tours = xmlDoc.getElementsByTagName("ThemeData");
-                for (i = 0; i < tours.length; i++) {
-                    var themeName = tours[i].childNodes[3].innerHTML;
-                    themeName = decodeXml(themeName);
-                    var themeDescription = tours[i].childNodes[0].innerHTML;
-                    themeDescription = decodeXml(themeDescription);
-                    //themeDescriptionTrimmed = constrainLength(themeDescription, 100);
-                    var themeId = tours[i].childNodes[2].innerHTML;
-
-                    createCard(themeName, themeDescription, themeId);
-            
-                    getXMLForTheme(themeName, themeDescription, themeId);
-                }
-            };
-            
-            // This function makes a XMLHttpRequest to load in
-            // the xml for a specific theme
-            function getXMLForTheme(themeName, themeDescription, themeId)
-            {
-                // make xml request to get the theme data
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        getImageFromXML(this, themeId);
-                    }
-                };
-                
-                xhttp.open("GET", "xmlForEachTheme/" + themeId +  ".xml", true);
-                xhttp.send(); 
-            }
-            
-            // Uses the xml file for the specific theme to find an image for the card
-            // then populates the image based on the image-[themeId] id attribute
-            // added to each cards image
-            function getImageFromXML(themeXML, themeId)
-            {
-                var entities, xmlDoc;
-                xmlDoc = themeXML.responseXML;
-                entities = xmlDoc.getElementsByTagName("ThemeEntityAbridgedData");
-                for (i = 0; i < entities.length; i++) {
-                    var imagePath = entities[i].childNodes[0].innerHTML;
-                    // Check to see if the imagePath is not empty
-                    // if it is empty we will try the next entity
-                    if ((imagePath || imagePath.trim()) && (entityImagesUsed.indexOf(imagePath) >= 0) == false){
-                        var image = document.getElementById("image-"+themeId);
-                        image.setAttribute('src', imagePath);
-                        entityImagesUsed.push(imagePath);
-                        break; // we only want one card per theme
-                    }
-                }
-            }
-            
-            //dynamically create cards
-            function createCard(tourName, tourDescription, tourId) {
-                console.log(tourId);
-
-                let col = document.createElement('div');
-            
-                let img = document.createElement('img');
-                img.className = 'card-img-top';
-                img.setAttribute("id", "image-"+tourId)
-                img.setAttribute('style', 'aspect-ratio: 4/3; object-fit: cover;')
-                //will need to be set to some relevant tree in the theme
-                img.setAttribute('src', 'https://previews.123rf.com/images/olegd/olegd1108/olegd110800153/10298561-close-up-of-coconut-palm-tree.jpg');
-                
-                let card = document.createElement('div');
-                card.className = 'card border-secondary shadow-lg';
-                card.setAttribute('id', tourId);
-                card.setAttribute('onclick', 'readMore('+tourId+')');
-            
-                let cardBody = document.createElement('div');
-                cardBody.className = 'card-body';
-            
-                let title = document.createElement('h4');
-                title.className = 'text-center';
-                //title.innerText = tourName;
-                let titleText = document.createElement('a');
-                titleText.setAttribute('href', '');
-                titleText.innerText = tourName;
-                titleText.className = 'text-body fw-bold';
-                title.appendChild(titleText);
-
-            
-                //theme description
-                let description = document.createElement('p');
-                description.className = '';
-                description.setAttribute('id', 'desc'+tourId);
-                description.setAttribute('style', 'overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;');
-                description.innerText = tourDescription;
-                /*
-                if (tourDescription.length >= 128) {
-
-                    card.setAttribute('onclick', 'readMore('+tourId+')');
-
-                    var themeDescriptionBeginning = tourDescription.substring(0, 128);
-                    var themeDescriptionEnd = tourDescription.substring(128);
-
-                    description.innerText = themeDescriptionBeginning;
-
-                    let cutOff = document.createElement('span');
-                    cutOff.innerText = '...';
-                    cutOff.setAttribute('id', 'dots'+tourId);
-                    description.appendChild(cutOff);
-
-                    let more = document.createElement('span');
-                    more.setAttribute('id', 'more'+tourId);
-                    more.setAttribute('style', 'display: none;')
-                    more.innerText = themeDescriptionEnd;
-                    description.appendChild(more);
-
-                } else {
-                    description.innerText = tourDescription;
-                }
-                
-
-                let more = document.createElement('span');
-                more.setAttribute('id', 'more');
-                more.innerText = themeDescriptionEnd;
-                */
-                let cardFooter = document.createElement('div');
-                cardFooter.className = 'card-footer text-center';
-                cardFooter.setAttribute('style', 'background-color: #3B1183;')
-            
-                //needs link to theme map
-                let map = document.createElement('button');
-                map.className = 'btn float-start btn-light';
-                map.setAttribute('href', '');
-                map.innerText = '';
-
-                let mapIcon = document.createElement('i');
-                mapIcon.className = 'bi-geo-alt-fill';
-
-                
-                let changeStateButton = document.createElement('button');
-                changeStateButton.className = 'btn float-end btn-light'
-                changeStateButton.setAttribute('href', '');
-                
-                let stateIcon = document.createElement('i');
-                stateIcon.className = 'bi-arrows-expand';
-                stateIcon.setAttribute('id', 'icon'+tourId);
-            
-                //needs link to theme directory
-                //let directory = document.createElement('a');
-                //directory.className = 'btn float-end btn-light';
-                //directory.setAttribute('href', '');
-                //directory.innerText = 'Directory';
-            
-                //build card
-                cardBody.appendChild(title);
-                cardBody.appendChild(description);
-                card.appendChild(img);
-                card.appendChild(cardBody);
-                map.appendChild(mapIcon);
-                cardFooter.appendChild(map);
-                changeStateButton.appendChild(stateIcon);
-                cardFooter.appendChild(changeStateButton);
-                //cardFooter.appendChild(directory);
-                card.appendChild(cardFooter);
-                col.appendChild(card);
-                cardContainer.appendChild(col);
-            };
-
-            
-            
-            function readMore(cardId) {
-                var icon = document.getElementById('icon'+cardId);
-                var description = document.getElementById('desc'+cardId);
-
-                let height = $('#desc'+cardId).height();
-                console.log(height);
-
-
-
-                var container = document.querySelector('#cardContainer');
-                var msnry = new Masonry( container, {
-                    percentPosition: 'True',
-                    horizontalOrder: 'True',
-                    transitionDuration: '0.2s'
-                });
-                
-                if(description.style.overflow === 'hidden'){
-                    description.style = '';
-                    icon.className = 'bi-arrows-collapse';
-                    msnry.layout();
-                } else {
-                    description.style = 'overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;';
-                    icon.className = 'bi-arrows-expand';
-                    msnry.layout();    
-                }
-            };
-            
+        <script src="js/xml.js"></script>
+        <script src="js/cards.js"></script>
+        <script src="js/readMore.js"></script>
+        <script> 
         </script>
     </head>
+
     <!-- <body style="background-color: #D9D5D1;"> -->
     <body style="background-color: white;">    
 
@@ -267,7 +24,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark py-2 fixed-top" style="background-color:#3B1183">
             <div class="container-fluid">
                 <a id="pageLabel" class="navbar-brand ">WSU Arboretum</a>
-                <a class="skip" href='#content'>Skip to content</a>
+                <a class="skip" href='#main' style="color: white">Skip to content</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -284,6 +41,7 @@
         <div id="invisible" class="container rounded p-2 my-2">
         </div>
 
+        <!-- Header -->
         <div class="container-lg mt-5 text-center">
             <div class = "row">
                 <div  class="col">
@@ -291,9 +49,10 @@
                 </div>
             </div>
         </div>
+        <!-- Header -->
 
         <!-- Main -->
-        <div id="main" class="container-lg mt-5">
+        <div id="main" class="container-lg my-5">
             <div id="cardContainer" data-masonry='{"percentPosition": true }' class="row row-cols-1 row-cols-xs-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 g-3" >
             </div>
         </div>
