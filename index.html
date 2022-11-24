@@ -6,8 +6,12 @@
         <title>WSU Arboretum</title>
         <link rel="icon" type="image/x-icon" href="https://www.winona.edu/favicon.png">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <link href="css/skipToLink.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
         <script>
+           
             // This is an array containing the paths to all the 
             // images we have used for cards so far
             // we need this so we can prevent duplicate
@@ -129,7 +133,7 @@
                 img.setAttribute('src', 'https://previews.123rf.com/images/olegd/olegd1108/olegd110800153/10298561-close-up-of-coconut-palm-tree.jpg');
                 
                 let card = document.createElement('div');
-                card.className = 'card h-100 shadow-sm';
+                card.className = 'card border-secondary shadow-lg';
                 card.setAttribute('id', tourId);
                 card.setAttribute('onclick', 'readMore('+tourId+')');
             
@@ -138,7 +142,13 @@
             
                 let title = document.createElement('h4');
                 title.className = 'text-center';
-                title.innerText = tourName;
+                //title.innerText = tourName;
+                let titleText = document.createElement('a');
+                titleText.setAttribute('href', '');
+                titleText.innerText = tourName;
+                titleText.className = 'text-body fw-bold';
+                title.appendChild(titleText);
+
             
                 //theme description
                 let description = document.createElement('p');
@@ -181,44 +191,77 @@
                 cardFooter.setAttribute('style', 'background-color: #3B1183;')
             
                 //needs link to theme map
-                let map = document.createElement('a');
+                let map = document.createElement('button');
                 map.className = 'btn float-start btn-light';
                 map.setAttribute('href', '');
-                map.innerText = 'Map';
+                map.innerText = '';
+
+                let mapIcon = document.createElement('i');
+                mapIcon.className = 'bi-geo-alt-fill';
+
+                
+                let changeStateButton = document.createElement('button');
+                changeStateButton.className = 'btn float-end btn-light'
+                changeStateButton.setAttribute('href', '');
+                
+                let stateIcon = document.createElement('i');
+                stateIcon.className = 'bi-arrows-expand';
+                stateIcon.setAttribute('id', 'icon'+tourId);
             
                 //needs link to theme directory
-                let directory = document.createElement('a');
-                directory.className = 'btn float-end btn-light';
-                directory.setAttribute('href', '');
-                directory.innerText = 'Directory';
+                //let directory = document.createElement('a');
+                //directory.className = 'btn float-end btn-light';
+                //directory.setAttribute('href', '');
+                //directory.innerText = 'Directory';
             
                 //build card
                 cardBody.appendChild(title);
                 cardBody.appendChild(description);
                 card.appendChild(img);
                 card.appendChild(cardBody);
+                map.appendChild(mapIcon);
                 cardFooter.appendChild(map);
-                cardFooter.appendChild(directory);
-                card.appendChild(cardFooter)
+                changeStateButton.appendChild(stateIcon);
+                cardFooter.appendChild(changeStateButton);
+                //cardFooter.appendChild(directory);
+                card.appendChild(cardFooter);
                 col.appendChild(card);
                 cardContainer.appendChild(col);
             };
 
             
+            
             function readMore(cardId) {
+                var icon = document.getElementById('icon'+cardId);
                 var description = document.getElementById('desc'+cardId);
+
+                let height = $('#desc'+cardId).height();
+                console.log(height);
+
+
+
+                var container = document.querySelector('#cardContainer');
+                var msnry = new Masonry( container, {
+                    percentPosition: 'True',
+                    horizontalOrder: 'True',
+                    transitionDuration: '0.2s'
+                });
                 
                 if(description.style.overflow === 'hidden'){
                     description.style = '';
+                    icon.className = 'bi-arrows-collapse';
+                    msnry.layout();
                 } else {
                     description.style = 'overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;';
+                    icon.className = 'bi-arrows-expand';
+                    msnry.layout();    
                 }
-
             };
             
         </script>
     </head>
-    <body style="background-color: #D9D5D1;">
+    <!-- <body style="background-color: #D9D5D1;"> -->
+    <body style="background-color: white;">    
 
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark py-2 fixed-top" style="background-color:#3B1183">
@@ -241,7 +284,7 @@
         <div id="invisible" class="container rounded p-2 my-2">
         </div>
 
-        <div class="cotainer-lg mt-5 text-center">
+        <div class="container-lg mt-5 text-center">
             <div class = "row">
                 <div  class="col">
                     <img src="logo.jpg" class="figure-img img-fluid" alt="Arboretum at Winona State logo">
@@ -250,8 +293,8 @@
         </div>
 
         <!-- Main -->
-        <div class="container-lg mt-5">
-            <div id="cardContainer" class="row row-cols-1 row-cols-xs-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 g-3 ">
+        <div id="main" class="container-lg mt-5">
+            <div id="cardContainer" data-masonry='{"percentPosition": true }' class="row row-cols-1 row-cols-xs-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-3 g-3" >
             </div>
         </div>
         <!-- Main -->
