@@ -94,11 +94,13 @@ function getImageFromXML(themeXML, themeId)
     entities = xmlDoc.getElementsByTagName("ThemeEntityAbridgedData");
     for (i = 0; i < entities.length; i++) {
         var imagePath = entities[i].childNodes[0].innerHTML;
+        var imageName = entities[i].childNodes[1].innerHTML;
         // Check to see if the imagePath is not empty
         // if it is empty we will try the next entity
         if ((imagePath || imagePath.trim()) && (entityImagesUsed.indexOf(imagePath) >= 0) == false){
             var image = document.getElementById("image-"+themeId);
             image.setAttribute('src', imagePath);
+            image.setAttribute('alt', imageName);
             entityImagesUsed.push(imagePath);
             break; // we only want one card per theme
         }
