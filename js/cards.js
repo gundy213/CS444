@@ -7,9 +7,10 @@ function createCard(tourName, tourDescription, tourId) {
     let img = document.createElement('img');
     img.className = 'card-img-top';
     img.setAttribute("id", "image-"+tourId)
-    img.setAttribute('style', 'aspect-ratio: 4/3; object-fit: cover;')
+    img.setAttribute('style', 'aspect-ratio: 4/3; object-fit: cover; cursor: pointer;')
     //will need to be set to some relevant tree in the theme
     img.setAttribute('src', 'https://previews.123rf.com/images/olegd/olegd1108/olegd110800153/10298561-close-up-of-coconut-palm-tree.jpg');
+    img.setAttribute('onclick', 'location.href = "https://www.winona.edu/m/arboretum/directory.asp?t='+tourId+'"');
     
     let card = document.createElement('div');
     card.className = 'card border-secondary shadow-lg';
@@ -67,13 +68,12 @@ function createCard(tourName, tourDescription, tourId) {
     */
     let cardFooter = document.createElement('div');
     cardFooter.className = 'card-footer text-center';
-    cardFooter.setAttribute('style', 'background-color: #3B1183;')
+    cardFooter.setAttribute('style', 'background-color: #3B1183;');
 
     //needs link to theme map
-    let map = document.createElement('a');
+    let map = document.createElement('button');
     map.className = 'btn float-start btn-light';
-    map.setAttribute('href', 'https://www.winona.edu/m/arboretum/thememap.asp?t='+tourId);
-    map.innerText = '';
+    map.setAttribute('onclick', 'location.href = "https://www.winona.edu/m/arboretum/thememap.asp?t='+tourId+'"');
 
     let mapIcon = document.createElement('i');
     mapIcon.className = 'bi-geo-alt-fill';
