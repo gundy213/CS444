@@ -24,6 +24,7 @@ function createCard(tourName, tourDescription, tourId) {
     title.className = 'text-center';
     //title.innerText = tourName;
     let titleText = document.createElement('a');
+    titleText.setAttribute('style', 'overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 1; line-clamp: 1; -webkit-box-orient: vertical;');
     titleText.setAttribute('href', 'https://www.winona.edu/m/arboretum/directory.asp?t='+tourId);
     titleText.innerText = tourName;
     titleText.className = 'text-body fw-bold';
