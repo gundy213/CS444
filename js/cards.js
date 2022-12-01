@@ -9,7 +9,7 @@ function createCard(tourName, tourDescription, tourId) {
     img.setAttribute("id", "image-"+tourId)
     img.setAttribute('style', 'aspect-ratio: 4/3; object-fit: cover; cursor: pointer;')
     //will need to be set to some relevant tree in the theme
-    img.setAttribute('src', 'https://previews.123rf.com/images/olegd/olegd1108/olegd110800153/10298561-close-up-of-coconut-palm-tree.jpg');
+    img.setAttribute('src', 'images/loading.svg');
     img.setAttribute('onclick', 'location.href = "https://www.winona.edu/m/arboretum/directory.asp?t='+tourId+'"');
     
     let card = document.createElement('div');
